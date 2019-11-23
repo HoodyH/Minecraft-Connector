@@ -1,0 +1,35 @@
+/give @p shield{devastation:1,Enchantments:[{id:blast_protection,lvl:4},{id:fire_protection,lvl:4},{id:mending,lvl:1},{id:projectile_protection,lvl:4},{id:protection,lvl:4},{id:thorns,lvl:3},{id:unbreaking,lvl:3}]}
+/give @p minecraft:spectral_arrow 128
+/give @p diamond_axe{devastation:1,Enchantments:[{id:efficiency,lvl:5},{id:fortune,lvl:3},{id:mending,lvl:1},{id:sharpness,lvl:5},{id:silk_touch,lvl:1},{id:smite,lvl:5},{id:unbreaking,lvl:3}]}
+/give @p elytra 1
+/give @p minecraft:firework_rocket 128
+
+/give @p diamond_helmet{devastation:1,Enchantments:[{id:aqua_affinity,lvl:1},{id:blast_protection,lvl:4},{id:fire_protection,lvl:4},{id:mending,lvl:1},{id:projectile_protection,lvl:4},{id:protection,lvl:4},{id:respiration,lvl:3},{id:thorns,lvl:3},{id:unbreaking,lvl:3}]}
+/give @p diamond_chestplate{devastation:1,Enchantments:[{id:blast_protection,lvl:4},{id:fire_protection,lvl:4},{id:mending,lvl:1},{id:projectile_protection,lvl:4},{id:protection,lvl:4},{id:thorns,lvl:3},{id:unbreaking,lvl:3}]}
+/give @p diamond_leggings{devastation:1,Enchantments:[{id:blast_protection,lvl:4},{id:fire_protection,lvl:4},{id:mending,lvl:1},{id:projectile_protection,lvl:4},{id:protection,lvl:4},{id:thorns,lvl:3},{id:unbreaking,lvl:3}]}
+/give @p diamond_boots{devastation:1,Enchantments:[{id:blast_protection,lvl:4},{id:depth_strider,lvl:3},{id:feather_falling,lvl:4},{id:fire_protection,lvl:4},{id:frost_walker,lvl:2},{id:mending,lvl:1},{id:projectile_protection,lvl:4},{id:protection,lvl:4},{id:thorns,lvl:3},{id:unbreaking,lvl:3}]}
+/give @p diamond_sword{devastation:1,Enchantments:[{id:fire_aspect,lvl:2},{id:knockback,lvl:2},{id:looting,lvl:3},{id:mending,lvl:1},{id:sharpness,lvl:5},{id:smite,lvl:5},{id:sweeping,lvl:3},{id:unbreaking,lvl:3}]}
+/give @p bow{devastation:1,Enchantments:[{id:flame,lvl:1},{id:infinity,lvl:1},{id:mending,lvl:1},{id:power,lvl:5},{id:punch,lvl:2},{id:unbreaking,lvl:3}]}
+
+/give @p iron_helmet{devastation:1,Enchantments:[{id:unbreaking,lvl:3}]}
+/give @p iron_chestplate{devastation:1,Enchantments:[{id:unbreaking,lvl:3}]}
+/give @p iron_leggings{devastation:1,Enchantments:[{id:unbreaking,lvl:3}]}
+/give @p iron_boots{devastation:1,Enchantments:[{id:feather_falling,lvl:4},{id:unbreaking,lvl:3}]}
+/give @p iron_sword{devastation:1,Enchantments:[{id:knockback,lvl:2}{id:sharpness,lvl:3}{id:unbreaking,lvl:3}]}
+/give @p bow{devastation:1,Enchantments:[{id:infinity,lvl:1},{id:unbreaking,lvl:3}]}
+
+give @p iron_helmet{Enchantments:[{id:unbreaking,lvl:3}]} 1
+give @p iron_chestplate{devastation:1,Enchantments:[{id:unbreaking,lvl:3}]}
+give @p iron_leggings{devastation:1,Enchantments:[{id:unbreaking,lvl:3}]}
+give @p iron_boots{devastation:1,Enchantments:[{id:feather_falling,lvl:4},{id:unbreaking,lvl:3}]}
+give @p iron_sword{devastation:1,Enchantments:[{id:knockback,lvl:2}{id:sharpness,lvl:3}{id:unbreaking,lvl:3}]}
+give @p bow{devastation:1,Enchantments:[{id:infinity,lvl:1},{id:unbreaking,lvl:3}]}
+give @p arrow 128
+
+summon  ~ ~1 ~ {Riding:{id:minecraft:command_block_minecart,Riding:{id:minecraft:command_block_minecart,Riding:{id:minecraft:command_block_minecart,Riding:{id:minecraft:command_block_minecart,Riding:{id:minecraft:command_block_minecart,Riding:{id:minecraft:command_block_minecart,Riding:{id:minecraft:command_block_minecart,Riding:{id:minecraft:falling_block,TileID:157,Time:1},Command:give @p iron_helmet{devastation:1,Enchantments:[{id:unbreaking,lvl:3}]}},Command:give @p iron_chestplate{devastation:1,Enchantments:[{id:unbreaking,lvl:3}]}},Command:give @p iron_leggings{devastation:1,Enchantments:[{id:unbreaking,lvl:3}]}},Command:give @p iron_boots{devastation:1,Enchantments:[{id:feather_falling,lvl:4},{id:unbreaking,lvl:3}]}},Command:give @p iron_sword{devastation:1,Enchantments:[{id:knockback,lvl:2}{id:sharpness,lvl:3}{id:unbreaking,lvl:3}]}},Command:give @p bow{devastation:1,Enchantments:[{id:infinity,lvl:1},{id:unbreaking,lvl:3}]}},Command:give @p arrow 128},Command:setblock ~ ~ ~ lava 7}
+
+summon minecraft:command_block_minecart ~ ~1 ~ {Riding:{id:minecraft:command_block_minecart,Riding:{id:minecraft:falling_block,TileID:157,Time:1},Command:give @p iron_helmet{devastation:1,Enchantments:[{id:unbreaking,lvl:3}]}},Command:setblock ~ ~ ~ lava 7}
+summon minecraft:command_block_minecart ~ ~1 ~ {Command:give @p iron_helmet{devastation:1,Enchantments:[{id:unbreaking,lvl:3}]}}
+
+minecraft:command_block_minecart
+minecraft:falling_block
