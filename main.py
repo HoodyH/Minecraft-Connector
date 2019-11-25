@@ -46,7 +46,7 @@ items = [
 
 ]
 
-temp_players = {524: 'AbbestiaDC'}
+temp_players = {}
 
 
 def main():
@@ -81,7 +81,10 @@ def main():
 
                     except Exception as e:
                         print('EXCEPTION: {}'.format(e))
-                        mc.postToChat('{} {} not found'.format(server_username, name))
+                        if len(name) <= 1:
+                            mc.postToChat('{} your name is missing'.format(server_username))
+                        else:
+                            mc.postToChat('{} {} not found'.format(server_username, name))
 
                 if mex == '.weapons':
                     mcr.connect()

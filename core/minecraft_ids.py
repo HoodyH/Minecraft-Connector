@@ -1,12 +1,12 @@
 class Enchant:
     AQUA_AFFINITY = {'max_level': 1, 'id_string': 'aqua_affinity', 'id_int': 6}
     BANE_OF_ARTHROPODS = {'max_level': 5, 'id_string': 'bane_of_arthropods', 'id_int': 18}
-    BLAST_PROTECTION = {'max_level': 1, 'id_string': 'blast_protection', 'id_int': 6}
-    UNBREAKING = {'max_level': 1, 'id_string': 'unbreaking', 'id_int': 6}
-    KNOCKBACK = {'max_level': 1, 'id_string': 'knockback', 'id_int': 6}
-    SHARPNESS = {'max_level': 1, 'id_string': 'sharpness', 'id_int': 6}
-    FEATHER_FALLING = {'max_level': 1, 'id_string': 'feather_falling', 'id_int': 6}
-    INFINITY = {'max_level': 1, 'id_string': 'infinity', 'id_int': 6}
+    BLAST_PROTECTION = {'max_level': 4, 'id_string': 'blast_protection', 'id_int': 3}
+    UNBREAKING = {'max_level': 3, 'id_string': 'unbreaking', 'id_int': 34}
+    KNOCKBACK = {'max_level': 2, 'id_string': 'knockback', 'id_int': 19}
+    SHARPNESS = {'max_level': 5, 'id_string': 'sharpness', 'id_int': 16}
+    FEATHER_FALLING = {'max_level': 4, 'id_string': 'feather_falling', 'id_int': 2}
+    INFINITY = {'max_level': 1, 'id_string': 'infinity', 'id_int': 51}
 
     def __init__(self, enchantments_list: list = None):
         """
