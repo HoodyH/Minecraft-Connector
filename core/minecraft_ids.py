@@ -95,3 +95,5 @@ IRON_BOOTS = ['iron_boots', 309, True]
 BOW = ['bow', 261, True]
 ARROW = ['arrow', 262, False]
 CROSSBOW = ['crossbow', 362, True]
+
+GOLDEN_CARROTS = ['golden_carrots', 396, False]

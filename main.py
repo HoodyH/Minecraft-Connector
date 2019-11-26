@@ -12,7 +12,6 @@ server_username = '<Pavlov>'
 items = [
     MinecraftItem(IRON_SWORD).id_string+Enchant([
         (Enchant.UNBREAKING, 3),
-        (Enchant.KNOCKBACK, 2),
         (Enchant.SHARPNESS, 2),
     ]).enchantments_string,
 
@@ -34,6 +33,7 @@ items = [
 
     MinecraftItem(BOW).id_string+Enchant([
         (Enchant.UNBREAKING, 3),
+        (Enchant.INFINITY, 3),
     ]).enchantments_string,
 
     MinecraftItem(ARROW).id_string+Enchant([
@@ -42,8 +42,10 @@ items = [
 
     MinecraftItem(CROSSBOW).id_string+Enchant([
         (Enchant.UNBREAKING, 3),
+        (Enchant.INFINITY, 3),
     ]).enchantments_string,
 
+    MinecraftItem(GOLDEN_CARROTS).id_string,
 ]
 
 temp_players = {}
