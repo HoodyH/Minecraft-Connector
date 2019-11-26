@@ -8,44 +8,20 @@ rcon_password = 'superrconpassword'
 
 server_username = '<Pavlov>'
 
+sword_enchant = Enchant([(Enchant.UNBREAKING, 3), (Enchant.SHARPNESS, 2)]).enchantments_string
+unbreaking_enchant = Enchant([(Enchant.UNBREAKING, 3)]).enchantments_string
+bow_enchant = Enchant([(Enchant.UNBREAKING, 3), (Enchant.INFINITY, 3)]).enchantments_string
 
 items = [
-    MinecraftItem(IRON_SWORD).id_string+Enchant([
-        (Enchant.UNBREAKING, 3),
-        (Enchant.SHARPNESS, 2),
-    ]).enchantments_string,
-
-    MinecraftItem(IRON_HELMET).id_string+Enchant([
-        (Enchant.UNBREAKING, 3),
-    ]).enchantments_string,
-
-    MinecraftItem(IRON_CHESTPLATE).id_string+Enchant([
-        (Enchant.UNBREAKING, 3),
-    ]).enchantments_string,
-
-    MinecraftItem(IRON_LEGGINGS).id_string+Enchant([
-        (Enchant.UNBREAKING, 3),
-    ]).enchantments_string,
-
-    MinecraftItem(IRON_BOOTS).id_string+Enchant([
-        (Enchant.UNBREAKING, 3),
-    ]).enchantments_string,
-
-    MinecraftItem(BOW).id_string+Enchant([
-        (Enchant.UNBREAKING, 3),
-        (Enchant.INFINITY, 3),
-    ]).enchantments_string,
-
-    MinecraftItem(ARROW).id_string+Enchant([
-        (Enchant.UNBREAKING, 3),
-    ]).enchantments_string,
-
-    MinecraftItem(CROSSBOW).id_string+Enchant([
-        (Enchant.UNBREAKING, 3),
-        (Enchant.INFINITY, 3),
-    ]).enchantments_string,
-
-    MinecraftItem(GOLDEN_CARROT).id_string,
+    MinecraftItem(IRON_SWORD, enchant=sword_enchant).id_string,
+    MinecraftItem(BOW, enchant=bow_enchant).id_string,
+    MinecraftItem(GOLDEN_CARROT, quantity=64).id_string,
+    MinecraftItem(CROSSBOW, enchant=unbreaking_enchant).id_string,
+    MinecraftItem(ARROW, quantity=64).id_string,
+    MinecraftItem(IRON_HELMET, enchant=unbreaking_enchant).id_string,
+    MinecraftItem(IRON_CHESTPLATE, enchant=unbreaking_enchant).id_string,
+    MinecraftItem(IRON_LEGGINGS, enchant=unbreaking_enchant).id_string,
+    MinecraftItem(IRON_BOOTS, enchant=unbreaking_enchant).id_string,
 ]
 
 temp_players = {}
@@ -93,8 +69,9 @@ def main():
                     player = temp_players.get(entity_id)
                     if player:
                         for item in items:
-                            c = 'give {} {} {}'.format(player, item, 1)
-                            mcr.command(c)
+                            c = 'give {} {}'.format(player, item)
+                            res = mcr.command(c)
+                            print(res)
                     else:
                         mc.postToChat(
                             '{} player not in rcon command system, usa .addplayer "player_name" to add'.format(

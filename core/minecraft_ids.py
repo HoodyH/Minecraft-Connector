@@ -68,15 +68,25 @@ class Enchant:
 
 class MinecraftItem:
 
-    def __init__(self, item):
+    def __init__(self, item, enchant=None, quantity=1):
+        """
+        :param item: Item array
+        :param enchant: string of the enchant, to append only
+        :param quantity: int value
+        """
         self.item = item
+        self.quantity = quantity
+        self.enchant = enchant
 
     def __str__(self):
         return 'NAME: minecraft:{} | ID'
 
     @property
     def id_string(self):
-        return 'minecraft:{}'.format(self.item[0])
+        if self.enchant_available:
+            return 'minecraft:{}{} {}'.format(self.item[0], self.enchant, self.quantity)
+        else:
+            return 'minecraft:{} {}'.format(self.item[0], self.quantity)
 
     @property
     def id_int(self):
