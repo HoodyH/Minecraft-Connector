@@ -96,4 +96,4 @@ BOW = ['bow', 261, True]
 ARROW = ['arrow', 262, False]
 CROSSBOW = ['crossbow', 362, True]
 
-GOLDEN_CARROTS = ['golden_carrots', 396, False]
+GOLDEN_CARROT = ['golden_carrot', 396, False]

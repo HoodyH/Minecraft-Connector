@@ -45,7 +45,7 @@ items = [
         (Enchant.INFINITY, 3),
     ]).enchantments_string,
 
-    MinecraftItem(GOLDEN_CARROTS).id_string,
+    MinecraftItem(GOLDEN_CARROT).id_string,
 ]
 
 temp_players = {}
