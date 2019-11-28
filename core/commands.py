@@ -24,6 +24,15 @@ class Commands:
         MinecraftItem(ARROW, quantity=64).id_string,
     ]
 
+    teams = {
+        'white': '-51 63 263',
+        'orange': '-58 63 192',
+        'blue': '6 63 180',
+        'yellow': '61 63 202',
+        'green': '86 63 255',
+        'grey': '23 63 276',
+    }
+
     def __init__(self, mc, mcr):
         self.mc = mc
         self.mcr = mcr
@@ -78,6 +87,33 @@ class Commands:
                             self.mc.postToChat('{} {} not found'.format(server_username, name))
 
                 """
+                Teleport the player and set his spawn point to the selected team
+                """
+                if mex.startswith('.team'):
+                    color = mex[5:].lower().replace(' ', '')
+                    print('1'+color+'1')
+                    coords = self.teams.get(color)
+                    print(coords)
+                    if not coords:
+                        self.mc.postToChat('{} {} not found'.format(server_username, color))
+                        return
+
+                    self.mcr.connect()
+                    player = self.temp_players.get(entity_id)
+                    if player:
+                        c = 'teleport {} {}'.format(player, coords)
+                        self.mcr.command(c)
+                        c = 'spawnpoint {} {}'.format(player, coords)
+                        self.mcr.command(c)
+                    else:
+                        self.mc.postToChat(
+                            '{} player not in rcon command system, usa .addplayer "player_name" to add'.format(
+                                server_username,
+                            )
+                        )
+                    self.mcr.disconnect()
+
+                """
                 Give to a specific player the items contained in self.items,
                 the container is statically built
                 """
@@ -104,10 +140,14 @@ class Commands:
                     self.mcr.connect()
                     msg_add_player = '\u00A76.addplayer "player_name"\u00A7f --> to allow user to use commands'
                     msg_weapons = '\u00A76.weapons\u00A7f --> get a set of weapons to fight in hungergames arena'
+                    msg_team = '\u00A76.team "color"\u00A7f --> ' \
+                               'teleport the player and set his spawn point for selected team\n' \
+                               '\u00A79Colors: white orange blue yellow green grey'
 
                     msgs_help_list = [
                         msg_add_player,
-                        msg_weapons
+                        msg_weapons,
+                        msg_team,
                     ]
 
                     self.mcr.command('say \u00A7cList of commands:')
