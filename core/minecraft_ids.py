@@ -68,10 +68,10 @@ class Enchant:
 
 class MinecraftItem:
 
-    def __init__(self, item, enchant=None, quantity=1):
+    def __init__(self, item: list, enchant: str = None, quantity=1):
         """
-        :param item: Item array
-        :param enchant: string of the enchant, to append only
+        :param item: Item list
+        :param enchant: list of the enchant, to append only. Built with enchant class
         :param quantity: int value
         """
         self.item = item
@@ -107,3 +107,4 @@ ARROW = ['arrow', 262, False]
 CROSSBOW = ['crossbow', 362, True]
 
 GOLDEN_CARROT = ['golden_carrot', 396, False]
+FLINT_AND_STEEL = ['flint_and_steel', 259, False]
