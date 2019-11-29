@@ -4,12 +4,14 @@ from mcrcon import MCRcon
 from core.commands import Commands
 from core.ServerHandler import (MinecraftServerHandler, MinecraftServerExecutableBuilder)
 
+from minecraft_games.hunger_games import HungerGames
+
+
 server_ip = '10.32.10.112'
 rcon_password = 'superrconpassword'
 
 
-def main():
-
+def server():
     mc = Minecraft.create(server_ip)
     mcr = MCRcon(server_ip, rcon_password)
 
@@ -25,6 +27,11 @@ def main():
         cmd.check_commands()
         cmd.do_looped_actions()
         sleep(0.25)
+
+
+def main():
+    hg = HungerGames()
+    hg.start_game()
 
 
 if __name__ == "__main__":
