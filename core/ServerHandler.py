@@ -7,7 +7,7 @@ from threading import Timer
 import logging
 import sys
 
-log_name = 'logs/minecraft-connector.log'
+log_name = 'minecraft-connector.log'
 file_handler = logging.FileHandler(filename=log_name)
 stdout_handler = logging.StreamHandler(sys.stdout)
 handlers = [file_handler, stdout_handler]

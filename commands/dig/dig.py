@@ -1,11 +1,12 @@
 from mcpi import block
+from configurations.configurations import mc_rcon, mc
 
 
 class Dig:
 
-    def __init__(self, mc, mcr):
+    def __init__(self):
         self.mc = mc
-        self.mcr = mcr
+        self.mcr = mc_rcon
 
         self.__active = False
 

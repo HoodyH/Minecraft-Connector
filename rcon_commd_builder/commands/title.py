@@ -1,5 +1,5 @@
 import json
-from minecraft_core.minecraft_config import mc_rcon
+from configurations.configurations import mc_rcon
 
 
 class TitleCommand:

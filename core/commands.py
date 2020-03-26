@@ -1,45 +1,16 @@
-from core.minecraft_ids import *
-from core.dig import Dig
-
-server_username = '<Pavlov>'
+from configurations.configurations import mc_rcon, mc, BOT_NAME
+from commands.dig.dig import Dig
+from commands.hunger_games.hunger_games import HungerGames
 
 
 class Commands:
 
-    sword_enchant = Enchant([(Enchant.UNBREAKING, 3), (Enchant.SHARPNESS, 2)]).enchantments_string
-    unbreaking_enchant = Enchant([(Enchant.UNBREAKING, 3)]).enchantments_string
-    bow_enchant = Enchant([(Enchant.UNBREAKING, 3), (Enchant.INFINITY, 3)]).enchantments_string
-    boot_enchant = Enchant([(Enchant.UNBREAKING, 3), (Enchant.FEATHER_FALLING, 2)]).enchantments_string
-
-    items = [
-        MinecraftItem(IRON_SWORD, enchant=sword_enchant).id_string,
-        MinecraftItem(BOW, enchant=bow_enchant).id_string,
-        MinecraftItem(GOLDEN_CARROT, quantity=64).id_string,
-        MinecraftItem(CROSSBOW, enchant=unbreaking_enchant).id_string,
-        MinecraftItem(FLINT_AND_STEEL).id_string,
-        MinecraftItem(IRON_HELMET, enchant=unbreaking_enchant).id_string,
-        MinecraftItem(IRON_CHESTPLATE, enchant=unbreaking_enchant).id_string,
-        MinecraftItem(IRON_LEGGINGS, enchant=unbreaking_enchant).id_string,
-        MinecraftItem(IRON_BOOTS, enchant=boot_enchant).id_string,
-        MinecraftItem(ARROW, quantity=64).id_string,
-    ]
-
-    teams = {
-        'white': '-51 63 263',
-        'orange': '-58 63 192',
-        'blue': '6 63 180',
-        'yellow': '61 63 202',
-        'green': '86 63 255',
-        'grey': '23 63 276',
-    }
-
-    def __init__(self, mc, mcr):
+    def __init__(self):
         self.mc = mc
-        self.mcr = mcr
+        self.mcr = mc_rcon
 
-        self.temp_players = {}
-
-        self.dig = Dig(mc, mcr)
+        self.dig = Dig()
+        self.hunger_games = HungerGames()
 
     def check_commands(self):
         chat_events = self.mc.events.pollChatPosts()
@@ -61,84 +32,93 @@ class Commands:
                 if mex.startswith('.mine'):
                     self.dig.active_status = not self.dig.active_status
                     self.mc.postToChat('{} auto mining toggled to {}'.format(
-                        server_username,
+                        BOT_NAME,
                         self.dig.active_status,
                     ))
 
                 """
                 Add a player in the system for the target commands
                 """
-                if mex.startswith('.addplayer'):
-                    name = mex[11:]
+                if mex.startswith('.join'):
+                    name = mex[6:]
                     try:
                         id_check = self.mc.getPlayerEntityId(name)
-                        self.temp_players[id_check] = name
+                        self.hunger_games.add_player(id_check, name)
                         self.mc.postToChat('{} {} added, now you can use the commands .help for info'.format(
-                            server_username,
+                            BOT_NAME,
                             name
                         ))
-                        print(self.temp_players)
 
                     except Exception as e:
                         print('EXCEPTION: {}'.format(e))
                         if len(name) <= 1:
-                            self.mc.postToChat('{} your name is missing'.format(server_username))
+                            self.mc.postToChat('{} your name is missing'.format(BOT_NAME))
                         else:
-                            self.mc.postToChat('{} {} not found'.format(server_username, name))
+                            self.mc.postToChat('{} {} not found'.format(BOT_NAME, name))
 
                 """
-                Teleport the player and set his spawn point to the selected team
+                Choose the team of player and set his spawn point to the selected team
                 """
                 if mex.startswith('.team'):
                     color = mex[5:].lower().replace(' ', '')
-                    print('1'+color+'1')
-                    coords = self.teams.get(color)
-                    print(coords)
-                    if not coords:
-                        self.mc.postToChat('{} {} not found'.format(server_username, color))
+                    try:
+                        self.hunger_games.set_team(entity_id, color.upper())
                         return
-
-                    self.mcr.connect()
-                    player = self.temp_players.get(entity_id)
-                    if player:
-                        c = 'teleport {} {}'.format(player, coords)
-                        self.mcr.command(c)
-                        c = 'spawnpoint {} {}'.format(player, coords)
-                        self.mcr.command(c)
-                    else:
-                        self.mc.postToChat(
-                            '{} player not in rcon command system, usa .addplayer "player_name" to add'.format(
-                                server_username,
+                    except ValueError as exc:
+                        if str(exc) == 'Player Not Found':
+                            self.mc.postToChat(
+                                '{} Player not in rcon command system, use .addplayer "player_name" to add'.format(
+                                    BOT_NAME,
+                                )
                             )
-                        )
-                    self.mcr.disconnect()
+                        if str(exc) == 'Color Not Found':
+                            self.mc.postToChat('{} Color not found'.format(BOT_NAME))
+                    except Exception as exc:
+                        if exc:
+                            self.mc.postToChat('{} The game is started, you can\'t change team'.format(BOT_NAME))
+
+                if mex.startswith('.start'):
+                    try:
+                        self.hunger_games.start()
+                        self.mc.postToChat('{} Let\'s the games begin'.format(BOT_NAME))
+                    except Exception as exc:
+                        print(exc)
+                        if exc:
+                            self.mc.postToChat('{} The game is started, you can\'t start a new game'.format(BOT_NAME))
+
+                if mex.startswith('.lobby'):
+                    self.hunger_games.all_to_lobby()
+                    self.mc.postToChat('{} Prepare for the battle'.format(BOT_NAME))
+
+                if mex.startswith('.gametime'):
+                    try:
+                        time = int(mex[10:].replace(' ', ''))
+                    except ValueError:
+                        self.mc.postToChat('{} Wrong value try with a number'.format(BOT_NAME))
+                        return
+                    self.hunger_games.game_time = time
+                    self.mc.postToChat('{} Game time set to {}'.format(BOT_NAME, time))
 
                 """
                 Give to a specific player the items contained in self.items,
                 the container is statically built
                 """
                 if mex == '.weapons':
-                    self.mcr.connect()
-                    player = self.temp_players.get(entity_id)
-                    if player:
-                        for item in self.items:
-                            c = 'give {} {}'.format(player, item)
-                            res = self.mcr.command(c)
-                            print(res)
-                    else:
+                    try:
+                        self.hunger_games.weapons(entity_id)
+                    except ValueError:
                         self.mc.postToChat(
                             '{} player not in rcon command system, usa .addplayer "player_name" to add'.format(
-                                server_username,
+                                BOT_NAME,
                             )
                         )
-                    self.mcr.disconnect()
 
                 """
                 Send in minecraft game chat the list of available commands
                 """
                 if mex == '.help':
                     self.mcr.connect()
-                    msg_add_player = '\u00A76.addplayer "player_name"\u00A7f --> to allow user to use commands'
+                    msg_add_player = '\u00A76.join "player_name"\u00A7f --> to allow user to use commands'
                     msg_weapons = '\u00A76.weapons\u00A7f --> get a set of weapons to fight in hungergames arena'
                     msg_team = '\u00A76.team "color"\u00A7f --> ' \
                                'teleport the player and set his spawn point for selected team\n' \
@@ -153,7 +133,8 @@ class Commands:
                     self.mcr.command('say \u00A7cList of commands:')
                     for msg in msgs_help_list:
                         self.mcr.command('say {}'.format(msg))
-                    self.mcr.disconnect()
+
+        self.mcr.disconnect()
 
     def do_looped_actions(self):
         self.dig.mining()
