@@ -64,24 +64,20 @@ class TitleCommand:
         return json.dumps(command_dict)
 
     def send(self):
-        mc_rcon.connect()
         command = 'title {} {} {}'.format(
             self.target,
             self.position,
             self.title_json_command(),
         )
         mc_rcon.command(command)
-        mc_rcon.disconnect()
 
     def reset(self):
-        mc_rcon.connect()
         command = 'title {} {} {}'.format(
             self.target,
             self.position,
             '{"text": ""}',
         )
         mc_rcon.command(command)
-        mc_rcon.disconnect()
 
 
 class TitleCommandBuilder:

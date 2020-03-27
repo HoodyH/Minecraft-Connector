@@ -67,21 +67,17 @@ class HungerGames:
             MinecraftItem(ARROW, quantity=64).id_string,
         ]
 
-        self.mcr.connect()
         for item in items:
             self.mcr.command('give {} {}'.format(player.name, item))
-        self.mcr.disconnect()
 
     def all_to_lobby(self):
 
         self.__is_game = False
 
-        self.mcr.connect()
         for player in self.lobby:
             self.mcr.command('teleport {} {}'.format(player.name, Teams.LOBBY.value))
             self.mcr.command('gamemode spectator {}'.format(player.name))
         self.mcr.command('scoreboard objectives setdisplay list Deaths')
-        self.mcr.disconnect()
 
     def start(self):
 
@@ -90,7 +86,6 @@ class HungerGames:
 
         self.__is_game = True
 
-        self.mcr.connect()
         for player in self.lobby:
             self.mcr.command('spawnpoint {} {}'.format(player.name, player.team.value))
             self.mcr.command('teleport {} {}'.format(player.name, player.team.value))
@@ -101,7 +96,6 @@ class HungerGames:
         self.mcr.command('scoreboard objectives add Kills playerKillCount')
         self.mcr.command('scoreboard objectives add Health health')
         self.mcr.command('scoreboard objectives setdisplay list Health')
-        self.mcr.disconnect()
         self.dt.start_game()
 
         Timer(self.game_time*60, self.__end_game).start()
