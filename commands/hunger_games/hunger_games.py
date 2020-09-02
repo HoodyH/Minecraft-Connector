@@ -1,3 +1,4 @@
+from random import  randrange
 from threading import Timer
 from configurations.configurations import mc_rcon
 from core.minecraft_ids import *
@@ -15,6 +16,18 @@ class HungerGames:
 
         self.__is_game = False
         self.game_time = 10
+        self.max_deaths = 10
+
+        self.game_timer = None
+
+        self.teams = [
+            'WHITE',
+            'ORANGE',
+            'BLUE',
+            'YELLOW',
+            'GREEN',
+            'GREY',
+        ]
 
     def __find_player(self, player_id):
         player: Player
@@ -26,15 +39,26 @@ class HungerGames:
 
     def add_player(self, player_id, name):
         if not self.__find_player(player_id):
-            self.lobby.append(Player(player_id, name))
+            p = Player(player_id, name)
+
+            idx = randrange(0, len(self.teams))
+            p.team = Teams[self.teams[idx]]
+
+            self.lobby.append(p)
+            # self.mcr.command('gamemode spectator {}'.format(name))
+            self.mcr.command('gamemode survival {}'.format(name))
+            return str(p.team)[6:].lower()
+
+        return None
 
     def set_team(self, player_id: int, color):
 
         if self.__is_game:
             raise Exception('Game Already Started')
 
-        team = Teams[color]
-        if not team:
+        try:
+            team = Teams[color]
+        except Exception as exc:
             raise ValueError('Color Not Found')
 
         player = self.__find_player(player_id)
@@ -76,8 +100,10 @@ class HungerGames:
 
         for player in self.lobby:
             self.mcr.command('teleport {} {}'.format(player.name, Teams.LOBBY.value))
-            self.mcr.command('gamemode spectator {}'.format(player.name))
-        self.mcr.command('scoreboard objectives setdisplay list Deaths')
+            self.mcr.command('gamemode survival {}'.format(player.name))
+            self.mcr.command('clear {}'.format(player.name))
+        self.mcr.command('scoreboard objectives setdisplay list Kills')
+        self.mcr.command('team modify pvp friendlyFire false')
 
     def start(self):
 
@@ -86,20 +112,47 @@ class HungerGames:
 
         self.__is_game = True
 
+        self.mcr.command('scoreboard objectives add Deaths deathCount')
+        self.mcr.command('scoreboard objectives add Kills playerKillCount')
+        self.mcr.command('scoreboard objectives add Health health')
+
+        self.mcr.command('scoreboard objectives setdisplay list Health')
+        self.mcr.command('time set night')
+
         for player in self.lobby:
             self.mcr.command('spawnpoint {} {}'.format(player.name, player.team.value))
             self.mcr.command('teleport {} {}'.format(player.name, player.team.value))
             self.mcr.command('gamemode survival {}'.format(player.name))
+            self.mcr.command('scoreboard players reset {} Deaths'.format(player.name))
+            self.mcr.command('scoreboard players reset {} Kills'.format(player.name))
+
+        # Print to screen
+        self.dt.start_game()
+        self.mcr.command('team modify pvp friendlyFire true')
+
+        # give the weapons to all the players
+        for player in self.lobby:
             self.weapons(player.player_id)
 
-        self.mcr.command('scoreboard objectives add Deaths deathCount')
-        self.mcr.command('scoreboard objectives add Kills playerKillCount')
-        self.mcr.command('scoreboard objectives add Health health')
-        self.mcr.command('scoreboard objectives setdisplay list Health')
-        self.dt.start_game()
+        self.game_timer = Timer(self.game_time * 60, self.end_game)
+        self.game_timer.start()
 
-        Timer(self.game_time*60, self.__end_game).start()
+    def check_status(self):
 
-    def __end_game(self):
+        if not self.__is_game:
+            return
+
+        player: Player
+        for player in self.lobby:
+            out = self.mcr.command('scoreboard players get {} Deaths'.format(player.name))
+            try:
+                counter = int(out[out.find('has') + 4:out.find('[') - 1])
+            except ValueError:
+                counter = 0
+
+            if counter >= self.max_deaths and self.__is_game is True:
+                self.mcr.command('gamemode spectator {}'.format(player.name))
+
+    def end_game(self):
         self.dt.game_over()
         self.all_to_lobby()

@@ -8,6 +8,7 @@ class Commands:
     def __init__(self):
         self.mc = mc
         self.mcr = mc_rcon
+        self.mcr.connect()
 
         self.dig = Dig()
         self.hunger_games = HungerGames()
@@ -16,7 +17,6 @@ class Commands:
         chat_events = self.mc.events.pollChatPosts()
         if chat_events:
 
-            self.mcr.connect()
             for chat_event in chat_events:
 
                 mex = chat_event.message
@@ -51,10 +51,15 @@ class Commands:
                     name = mex[6:]
                     try:
                         id_check = self.mc.getPlayerEntityId(name)
-                        self.hunger_games.add_player(id_check, name)
-                        self.mc.postToChat('{} {} added, now you can use the commands .help for info'.format(
+                        team_color = self.hunger_games.add_player(id_check, name)
+                        if not team_color:
+                            self.mc.postToChat('{} {} player already known'.format(BOT_NAME, name))
+                            return
+
+                        self.mc.postToChat('{} {} added to {} team'.format(
                             BOT_NAME,
-                            name
+                            name,
+                            team_color
                         ))
 
                     except Exception as e:
@@ -74,6 +79,7 @@ class Commands:
                         self.hunger_games.set_team(entity_id, color.upper())
                         self.mc.postToChat('{} Team set to {}'.format(BOT_NAME, color.title()))
                         return
+
                     except ValueError as exc:
                         if str(exc) == 'Player Not Found':
                             self.mc.postToChat(
@@ -83,6 +89,7 @@ class Commands:
                             )
                         if str(exc) == 'Color Not Found':
                             self.mc.postToChat('{} Color not found'.format(BOT_NAME))
+
                     except Exception as exc:
                         if exc:
                             self.mc.postToChat('{} The game is started, you can\'t change team'.format(BOT_NAME))
@@ -105,6 +112,13 @@ class Commands:
                 if mex.startswith('.lobby'):
                     self.hunger_games.all_to_lobby()
                     self.mc.postToChat('{} Prepare for the battle'.format(BOT_NAME))
+
+                """
+                Reset the game and teleport all the players to the lobby
+                """
+                if mex.startswith('.end'):
+                    self.hunger_games.end_game()
+                    self.mc.postToChat('{} Game has been reset'.format(BOT_NAME))
 
                 """
                 length of the game
@@ -160,3 +174,5 @@ class Commands:
 
     def do_looped_actions(self):
         self.dig.mining()
+        # da evitare che 2 thread usino il socket contemporaneamente
+        # self.hunger_games.check_status()
